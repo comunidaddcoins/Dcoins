@@ -1,0 +1,26 @@
+[Unit]
+Description=Dcoins's distributed currency daemon
+After=network.target
+
+[Service]
+User=dcoins
+Group=dcoins
+
+Type=forking
+PIDFile=/var/lib/dcoinsd/dcoinsd.pid
+
+ExecStart=/usr/bin/dcoinsd -daemon -pid=/var/lib/dcoinsd/dcoinsd.pid \
+          -conf=/etc/dcoins/dcoins.conf -datadir=/var/lib/dcoinsd
+
+ExecStop=-/usr/bin/dcoins-cli -conf=/etc/dcoins/dcoins.conf \
+         -datadir=/var/lib/dcoinsd stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
